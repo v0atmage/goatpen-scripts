@@ -16,4 +16,4 @@ Run `purge-lemmy.sh`.
 
 ## To upgrade lemmy to 0.12.0 with the no slur check patch
 
-Run `upgrade.sh`
+Run `upgrade.sh`.
