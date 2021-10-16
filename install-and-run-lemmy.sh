@@ -5,7 +5,7 @@ VERSION='v0.8.10'
 CWD=/lemmy
 
 # Create app folder
-mkdir $CWD
+mkdir -p $CWD
 cd $CWD
 
 wget https://raw.githubusercontent.com/LemmyNet/lemmy/$VERSION/docker/iframely.config.local.js
