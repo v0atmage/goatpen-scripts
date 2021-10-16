@@ -5,7 +5,7 @@ services:
 #    image: postgres:12-alpine
 #    environment:
 #      - POSTGRES_USER=lemmy
-#      - POSTGRES_PASSWORD=password
+#      - POSTGRES_PASSWORD=CHANGE_TO_ACTUAL_PW
 #      - POSTGRES_DB=lemmy
 #    volumes:
 #      - ./volumes/postgres:/var/lib/postgresql/data
@@ -27,11 +27,11 @@ services:
   lemmy-ui:
     image: dessalines/lemmy-ui:0.12.0
     ports:
-      - "127.0.0.1:1235:1234"
+      - "1234:1234"
     restart: always
     environment:
       - LEMMY_INTERNAL_HOST=lemmy:8536
-      - LEMMY_EXTERNAL_HOST=localhost:8536
+      - LEMMY_EXTERNAL_HOST=preview.goatpen.co
       - LEMMY_HTTPS=false
     depends_on: 
       - lemmy
@@ -43,5 +43,23 @@ services:
     user: 991:991
     volumes:
       - ./volumes/pictrs:/mnt
+    environment:
+      - PICTRS_ADDR=0.0.0.0:8080
     restart: always
+
+#    nginx:
+#    image: nginx
+#    volumes:
+#      - /docker/nginx:/mnt/yeet
+#      - ./preview.conf:/etc/nginx/conf.d/preview.conf
+#      - ./ssl/goatpen.crt:/etc/nginx/ssl/goatpen.crt
+#      - ./ssl/goatpen.dec.key:/etc/nginx/ssl/goatpen.key
+#    restart: always
+#    ports:
+#      - "80:80"
+#      - "443:443"
+#    depends_on:
+#      - lemmy
+#      - lemmy-ui
+#      - pictrs
 

@@ -5,20 +5,21 @@ services:
     image: postgres:12-alpine
     environment:
       - POSTGRES_USER=lemmy
-      - POSTGRES_PASSWORD=password
+      - POSTGRES_PASSWORD=CHANGE_TO_ACTUAL_PW
       - POSTGRES_DB=lemmy
     volumes:
       - ./volumes/postgres:/var/lib/postgresql/data
     restart: always
+    ports:
+      - "5432:5432"
 
   lemmy:
     image: dessalines/lemmy:v0.8.10
     ports:
-      - "127.0.0.1:8536:8536"
+      - "0.0.0.0:8536:8536"
     restart: always
     environment:
-      - RUST_LOG=info
-        RUST_BACKTRACE=full
+      - RUST_LOG=error
     volumes:
       - ./lemmy.hjson:/config/config.hjson
     depends_on:
@@ -29,29 +30,49 @@ services:
   lemmy-ui:
     image: dessalines/lemmy-ui:v0.8.10
     ports:
-      - "1235:1234"
+      - "1234:1234"
     restart: always
     environment:
       - LEMMY_INTERNAL_HOST=lemmy:8536
-      - LEMMY_EXTERNAL_HOST=localhost:8536
+      - LEMMY_EXTERNAL_HOST=preview.goatpen.co
       - LEMMY_HTTPS=false
-    depends_on: 
+    depends_on:
       - lemmy
 
   pictrs:
     image: asonix/pictrs:v0.2.5-r0
-    ports: 
-      - "127.0.0.1:8537:8080"
+    ports:
+      - "8080:8080"
     user: 991:991
     volumes:
       - ./volumes/pictrs:/mnt
+    environment:
+      - PICTRS_ADDR=0.0.0.0:8080
     restart: always
 
   iframely:
     image: dogbin/iframely:latest
     ports:
-      - "127.0.0.1:8061:80"
+      - "8061:80"
     volumes:
       - ./iframely.config.local.js:/iframely/config.local.js:ro
     restart: always
-    mem_limit: 100m
+    mem_limit: 1g
+
+   nginx:
+    image: nginx
+    volumes:
+      - /docker/nginx:/mnt/yeet
+      - ./preview.conf:/etc/nginx/conf.d/preview.conf
+      - ./ssl/goatpen.crt:/etc/nginx/ssl/goatpen.crt
+      - ./ssl/goatpen.dec.key:/etc/nginx/ssl/goatpen.key
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - iframely
+      - lemmy
+      - lemmy-ui
+      - pictrs
+
