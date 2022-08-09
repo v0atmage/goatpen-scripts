@@ -3,7 +3,7 @@
 CWD=/lemmy
 cd $CWD
 
-VERSION='0.12.0-no-slur-check'
+VERSION='cat VERSION`
 
 # Kill lemmy
 docker kill lemmy_lemmy_1

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-VERSION='v0.8.10'
+VERSION='cat VERSION`
 
 CWD=/lemmy
 
