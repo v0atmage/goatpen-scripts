@@ -1,6 +1,6 @@
 #!/bin/sh
 
-VERSION='cat VERSION`
+VERSION=`cat VERSION`
 
 CWD=/lemmy
 
